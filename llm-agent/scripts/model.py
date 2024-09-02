@@ -93,7 +93,7 @@ class QwenModel(BaseModel):
         ]
         response = dashscope.MultiModalConversation.call(model=self.model, messages=messages)
         if response.status_code == HTTPStatus.OK:
-            return True, response.output.choices[0].message.content[0]["text"]
+            return True, response.output.choices[0].message.content
         else:
             return False, response.message
 
