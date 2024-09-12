@@ -14,6 +14,7 @@ STEPS_PER_RUN = 60
 class UiBotEnv(Env):
     _steps = 0
     _current_coins = 0
+    device = "192.168.10.112"
 
     def __init__(self):
         image_height = 100
@@ -34,8 +35,11 @@ class UiBotEnv(Env):
             "coins": self._current_coins
         }
 
+    def _get_screenshot(self) -> str:
+        return get_latest_screenshot(self.device)
+
     def _get_state(self):
-        screenshot = get_latest_screenshot("192.168.10.112")
+        screenshot = self._get_screenshot()
         image_tensor = url_to_tensor(url=screenshot, size=(self.shape[2], self.shape[1]))
         return image_tensor
 
