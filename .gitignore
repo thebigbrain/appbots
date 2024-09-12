@@ -9,6 +9,7 @@ tmp/
 .idea/
 .vscode/
 .models/
+.cache/
 
 *.pt
 *.pth

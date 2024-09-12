@@ -8,32 +8,15 @@ import torch.nn as nn
 from appbots.core.agent import Agent
 from appbots.core.device import device
 from appbots.core.env import Env
+from appbots.core.model import load_model, save_model
+from appbots.uibot.dqn import DQN
 
 
-class DQN(nn.Module):
-    def __init__(self, input_shape, n_actions):
-        super(DQN, self).__init__()
-        # 考虑到输入是图像，使用卷积神经网络提取特征
-        self.conv = nn.Sequential(
-            nn.Conv2d(input_shape[0], 32, kernel_size=8, stride=4),
-            nn.ReLU(),
-            nn.Conv2d(32, 64, kernel_size=4, stride=2),
-            nn.ReLU(),
-            nn.Flatten()
-        )
-        # 全连接层输出每个动作对应的Q值
-        self.fc = nn.Linear(self.conv(torch.zeros(1, *input_shape)).shape[1], n_actions)
-
-    def forward(self, state):
-        x = self.conv(state)
-        q_values = self.fc(x)
-        return q_values
-
-
-class UiAgent(Agent):
+class UiBotAgent(Agent):
     dqn: DQN
     target_dqn: DQN
     path: str
+    name: str
 
     batch_size = 8
 
@@ -46,31 +29,25 @@ class UiAgent(Agent):
     def __init__(self, name: str, env: Env, epsilon=0.1):
         self.env = env
         self.epsilon = epsilon
-        self.path = os.path.join(os.path.abspath(".models"), f"{name}.pth")
+        self.name = name
+
+        self.path = os.path.join(os.path.abspath(".models"), f"{name}.pt")
 
         input_shape = env.observation_space.shape
         n_actions = env.n_actions
 
         print(f"{input_shape} {n_actions}")
 
-        self._load(input_shape, n_actions)
+        self.dqn = load_model(DQN(input_shape, n_actions), name=name)
 
         self.target_dqn = DQN(input_shape, n_actions)
         self.target_dqn.load_state_dict(self.dqn.state_dict())
         self.target_dqn.eval()
 
-    def _load(self, input_shape, n_actions):
-        if os.path.exists(self.path):
-            self.dqn = torch.load(self.path, weights_only=False)
-            print("模型加载成功")
-        else:
-            self.dqn = DQN(input_shape=input_shape,
-                           n_actions=n_actions)
-            print("模型文件不存在")
-
     def save(self):
         self.target_dqn.load_state_dict(self.dqn.state_dict())
-        torch.save(self.target_dqn, self.path)
+
+        save_model(self.target_dqn, self.name)
 
     def get_action(self, state: Any) -> Any:
         if np.random.rand() < self.epsilon:

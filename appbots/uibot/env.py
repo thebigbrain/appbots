@@ -1,61 +1,76 @@
-import random
 from typing import Any
 
 import numpy as np
-import torch
-from gymnasium.spaces import Discrete, Box, flatdim, MultiDiscrete
+from gymnasium.spaces import Discrete, Box, flatdim
 
 from appbots.core.env import Env
-from appbots.core.images.gen import generate_sample_image
+from appbots.pageclassifier.images import url_to_tensor
+from appbots.uibot.dataset import get_latest_screenshot
+
+NORMAL_REWARD = 1.0 * 10
+STEPS_PER_RUN = 60
 
 
-class UiElementEnv(Env):
+class UiBotEnv(Env):
     _steps = 0
-    _current_obs = None
+    _current_coins = 0
 
     def __init__(self):
-        self.observation_space = Box(low=0, high=1.0, shape=(4, 200, 100), dtype=np.float32)
+        image_height = 100
+        image_width = 50
+        self.shape = (4, image_height, image_width)
 
-        self.action_space = Discrete(8 + 200 * 100)
+        self.observation_space = Box(low=0, high=1.0, shape=self.shape, dtype=np.float32)
+
+        self.action_space = Discrete(8 + image_width * image_height)
 
     @property
     def n_actions(self) -> Any:
         return flatdim(self.action_space)
 
-
     def _get_info(self):
         return {
-            "step": self._steps
+            "step": self._steps,
+            "coins": self._current_coins
         }
 
-    def _get_next_state(self):
-        img = generate_sample_image()
-        return torch.from_numpy(img).permute(2, 0, 1)
+    def _get_state(self):
+        screenshot = get_latest_screenshot("192.168.10.112")
+        image_tensor = url_to_tensor(url=screenshot, size=(self.shape[2], self.shape[1]))
+        return image_tensor
 
-    def _get_reward(self, obs, action):
-        return random.random()
+    def _get_coins(self) -> float:
+        pass
+
+    def _get_reward(self, state, action):
+        if self._steps > STEPS_PER_RUN:
+            coins = self._get_coins()
+            reward = (coins - self._current_coins) / STEPS_PER_RUN
+            self._current_coins = coins
+            return reward
+
+        return NORMAL_REWARD
 
     def reset(self, seed=None, options=None):
         # We need the following line to seed self.np_random
         super().reset(seed=seed)
 
-        observation = self._get_next_state()
+        state = self._get_state()
         info = self._get_info()
 
-        self._current_obs = observation
-
-        return observation, info
+        return state, info
 
     def step(self, action):
-        terminated = self._steps > 100
-
-        reward = self._get_reward(self._current_obs, action)
-        state = self._get_next_state()
+        state = self._get_state()
 
         info = self._get_info()
-        trunked = False
+        trunked = self._steps > STEPS_PER_RUN
 
-        if terminated:
+        reward = self._get_reward(state, action)
+        terminated = reward < NORMAL_REWARD * 0.8
+
+        done = trunked or terminated
+        if done:
             self._steps = 0
 
         return state, reward, terminated, trunked, info
@@ -68,8 +83,4 @@ class UiElementEnv(Env):
 
 
 if __name__ == "__main__":
-    space = MultiDiscrete([8, 200, 100])
-    print(f"{flatdim(Discrete(8 + 200 * 100))}")
-    # sample = space.sample()
-    # print(f"{space}, {space / np.array([200, 100])}")
-
+    pass
