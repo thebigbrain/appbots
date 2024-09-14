@@ -2,7 +2,7 @@ import torch
 
 from appbots.core.model import load_model
 from appbots.datasets.annotation import update_tag_prediction, get_anno, get_tag_annotations
-from appbots.pageclassifier.images import url_to_tensor
+from appbots.core.images.utils import url_to_tensor
 from appbots.pageclassifier.labels import LabelCategory
 from appbots.pageclassifier.model import get_model, MODEL_NAME
 

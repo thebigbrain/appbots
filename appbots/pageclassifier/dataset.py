@@ -4,7 +4,7 @@ from torch.utils.data import DataLoader
 from torch.utils.data import Dataset
 
 from appbots.datasets.annotation import get_tag_annotations, get_anno
-from appbots.pageclassifier.images import url_to_tensor
+from appbots.core.images.utils import url_to_tensor
 from appbots.pageclassifier.labels import get_labels_tensor
 
 

@@ -15,3 +15,4 @@ def get_path(path_str: str):
 
 if __name__ == "__main__":
     print(get_root_dir())
+    print(get_path("assets"))

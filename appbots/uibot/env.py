@@ -4,7 +4,7 @@ import numpy as np
 from gymnasium.spaces import Discrete, Box, flatdim
 
 from appbots.core.env import Env
-from appbots.pageclassifier.images import url_to_tensor
+from appbots.core.images.utils import url_to_tensor
 from appbots.uibot.dataset import get_latest_screenshot
 
 NORMAL_REWARD = 1.0 * 10
@@ -40,7 +40,7 @@ class UiBotEnv(Env):
 
     def _get_state(self):
         screenshot = self._get_screenshot()
-        image_tensor = url_to_tensor(url=screenshot, size=(self.shape[2], self.shape[1]))
+        image_tensor = url_to_tensor(url=screenshot, size=self.shape[1:])
         return image_tensor
 
     def _get_coins(self) -> float:

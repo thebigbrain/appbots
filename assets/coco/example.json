@@ -1,0 +1,58 @@
+{
+  "info": {
+    "description": "My custom dataset",
+    "version": "1.0",
+    "year": 2023,
+    "date_created": "2023-11-22"
+  },
+  "licenses": [
+    {
+      "url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+      "name": "Attribution-NonCommercial-ShareAlike License"
+    }
+  ],
+  "images": [
+    {
+      "id": 1,
+      "file_name": "image1.jpg",
+      "height": 480,
+      "width": 640
+    },
+    {
+      "id": 2,
+      "file_name": "image2.jpg",
+      "height": 360,
+      "width": 480
+    }
+  ],
+  "annotations": [
+    {
+      "id": 1,
+      "image_id": 1,
+      "category_id": 1,
+      "bbox": [100, 50, 200, 150],
+      "area": 30000,
+      "iscrowd": 0
+    },
+    {
+      "id": 2,
+      "image_id": 2,
+      "category_id": 2,
+      "bbox": [50, 100, 150, 200],
+      "area": 22500,
+      "iscrowd": 0
+    }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "name": "cat",
+      "supercategory": "animal"
+    },
+    {
+      "id": 2,
+      "name": "dog",
+      "supercategory": "animal"
+    }
+  ]
+}

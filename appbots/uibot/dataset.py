@@ -1,9 +1,8 @@
 import requests
-import torch
 from torch.utils.data import Dataset
 
 from appbots.datasets.annotation import get_tag_annotations, get_anno
-from appbots.pageclassifier.images import url_to_tensor
+from appbots.core.images.utils import url_to_tensor
 
 
 class UiBotDataset(Dataset):
