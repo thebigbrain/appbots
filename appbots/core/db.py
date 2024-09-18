@@ -1,7 +1,7 @@
 import dataset
 
 
-_db: dataset.Database = None
+_db: dataset.Database
 
 
 def get_db(db_name="app_bot"):
