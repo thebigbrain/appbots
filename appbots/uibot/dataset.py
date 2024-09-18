@@ -14,7 +14,7 @@ class UiBotDataset(Dataset):
         # ... 读取图像和对应的标注信息
         d = self.data[idx]
         anno = get_anno(anno_id=d.get("id"))
-        image_tensor = url_to_tensor(url=anno.get("screenshot"))
+        image_tensor, _ = url_to_tensor(url=anno.get("screenshot"))
         return image_tensor
 
     def __len__(self):

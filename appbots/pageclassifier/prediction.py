@@ -25,7 +25,7 @@ def predict(img: torch.Tensor):
 
 def predict_anno(anno_id: int):
     anno = get_anno(anno_id)
-    image_tensor = url_to_tensor(url=anno.get("screenshot"))
+    image_tensor, _ = url_to_tensor(url=anno.get("screenshot"))
     p, s, i, prediction = predict(image_tensor)
 
     update_tag_prediction(anno.get('id'), p)

@@ -40,7 +40,7 @@ class UiBotEnv(Env):
 
     def _get_state(self):
         screenshot = self._get_screenshot()
-        image_tensor = url_to_tensor(url=screenshot, size=self.shape[1:])
+        image_tensor, _ = url_to_tensor(url=screenshot, size=self.shape[1:])
         return image_tensor
 
     def _get_coins(self) -> float:

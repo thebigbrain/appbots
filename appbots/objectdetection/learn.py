@@ -49,7 +49,7 @@ for epoch in range(num_epochs):
 
 # 预测
 with torch.no_grad():
-    image = read_image("assets/test.png")
+    image, source_image = read_image("assets/test.png")
     image.unsqueeze(0)
     prediction = model(image)
     print(prediction)

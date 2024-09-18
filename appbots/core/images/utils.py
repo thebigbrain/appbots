@@ -31,22 +31,22 @@ def download_image(url: str):
     return temp_file
 
 
-def image_to_tensor(image_path, size=None):
+def image_to_tensor(image_path, size=None) -> (Tensor, Image.Image):
     if size is None:
         size = (300, 150)
 
     source_img = Image.open(image_path)
     transform = build_transform(size)
-    return transform(source_img)
+    return transform(source_img), source_img
 
 
-def url_to_tensor(url, size=None) -> Tensor:
+def url_to_tensor(url, size=None) -> (Tensor, Image.Image):
     img = download_image(url)
-    img_tensor = image_to_tensor(img, size=size)
-    return img_tensor
+    img_tensor, source_img = image_to_tensor(img, size=size)
+    return img_tensor, source_img
 
 
-def read_image(image_path, size=None):
+def read_image(image_path, size=None) -> (Tensor, Image.Image):
     return image_to_tensor(get_path(image_path), size=size)
 
 
@@ -63,5 +63,6 @@ if __name__ == "__main__":
     # print(hash_url(test_url))
 
     image_size = (200, 100)
-    pil_image = to_pil_image(read_image("assets/test.png", size=image_size))
+    t, _ = read_image("assets/test.png", size=image_size)
+    pil_image = to_pil_image(t)
     pil_image.show()

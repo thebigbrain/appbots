@@ -17,7 +17,7 @@ class UiClassifierDataset(Dataset):
         # ... 读取图像和对应的标注信息
         d = self.data[idx]
         anno = get_anno(anno_id=d.get("id"))
-        image_tensor = url_to_tensor(url=anno.get("screenshot"))
+        image_tensor, _ = url_to_tensor(url=anno.get("screenshot"))
         tags = d.get("annotation", "").split(',') if d.get("annotation", "") is not None else ['未知']
         tags_tensor = get_labels_tensor(tags)
         return image_tensor, tags_tensor
