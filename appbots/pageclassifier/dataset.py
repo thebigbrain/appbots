@@ -3,8 +3,8 @@ from torch import Tensor
 from torch.utils.data import DataLoader
 from torch.utils.data import Dataset
 
-from appbots.datasets.annotation import get_tag_annotations, get_anno
-from appbots.core.images.utils import url_to_tensor
+from appbots.datasets.annotation import get_tag_annotations, get_bot_memo
+from appbots.core.images.builder import url_to_tensor
 from appbots.pageclassifier.labels import get_labels_tensor
 
 
@@ -16,7 +16,7 @@ class UiClassifierDataset(Dataset):
     def __getitem__(self, idx):
         # ... 读取图像和对应的标注信息
         d = self.data[idx]
-        anno = get_anno(anno_id=d.get("id"))
+        anno = get_bot_memo(anno_id=d.get("id"))
         image_tensor, _ = url_to_tensor(url=anno.get("screenshot"))
         tags = d.get("annotation", "").split(',') if d.get("annotation", "") is not None else ['未知']
         tags_tensor = get_labels_tensor(tags)

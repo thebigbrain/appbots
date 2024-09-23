@@ -1,8 +1,8 @@
 import torch
 
 from appbots.core.model import load_model
-from appbots.datasets.annotation import update_tag_prediction, get_anno, get_tag_annotations
-from appbots.core.images.utils import url_to_tensor
+from appbots.datasets.annotation import update_tag_prediction, get_bot_memo, get_tag_annotations
+from appbots.core.images.builder import url_to_tensor
 from appbots.pageclassifier.labels import LabelCategory
 from appbots.pageclassifier.model import get_model, MODEL_NAME
 
@@ -24,7 +24,7 @@ def predict(img: torch.Tensor):
 
 
 def predict_anno(anno_id: int):
-    anno = get_anno(anno_id)
+    anno = get_bot_memo(anno_id)
     image_tensor, _ = url_to_tensor(url=anno.get("screenshot"))
     p, s, i, prediction = predict(image_tensor)
 

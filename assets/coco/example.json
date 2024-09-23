@@ -14,13 +14,13 @@
   "images": [
     {
       "id": 1,
-      "file_name": "image1.jpg",
+      "file_name": "image1.png",
       "height": 480,
       "width": 640
     },
     {
       "id": 2,
-      "file_name": "image2.jpg",
+      "file_name": "image2.png",
       "height": 360,
       "width": 480
     }

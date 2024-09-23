@@ -1,5 +1,8 @@
 .*
 !.gitignore
+!.gitkeep
+
+assets/
 
 __pycache__/
 apps/

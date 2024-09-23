@@ -4,7 +4,7 @@ import numpy as np
 from gymnasium.spaces import Discrete, Box, flatdim
 
 from appbots.core.env import Env
-from appbots.core.images.utils import url_to_tensor
+from appbots.core.images.builder import url_to_tensor
 from appbots.uibot.dataset import get_latest_screenshot
 
 NORMAL_REWARD = 1.0 * 10

@@ -17,7 +17,6 @@ def hash_url(url):
 
 
 def download_image(url: str):
-    # url = url.replace("\"", "")
     temp_dir = get_cache_dir()
     temp_file = os.path.join(temp_dir, f"{hash_url(url)}.jpg")
     if os.path.exists(temp_file):
@@ -32,11 +31,9 @@ def download_image(url: str):
 
 
 def image_to_tensor(image_path, size=None) -> (Tensor, Image.Image):
-    if size is None:
-        size = (300, 150)
-
-    source_img = Image.open(image_path)
-    transform = build_transform(size)
+    source_img = Image.open(image_path).convert("RGB")
+    w, h = source_img.size
+    transform = build_transform(size=[h, w] if size is None else size)
     return transform(source_img), source_img
 
 
@@ -57,9 +54,25 @@ def to_pil_image(img_tensor: Tensor) -> Image.Image:
     return img_pil
 
 
+class ImageTensorBuilder:
+    tensor: Tensor
+    source: Image.Image
+    image_path: str
+
+    def to_pil(self) -> Image.Image:
+        return to_pil_image(self.tensor)
+
+    def load_from_path(self, image_path: str, size=None):
+        self.image_path = image_path
+        self.tensor, self.source = read_image(image_path, size=size)
+
+    def load_from_url(self, url: str, size=None):
+        self.image_path = download_image(url)
+        self.tensor, self.source = image_to_tensor(self.image_path, size=size)
+
+
 if __name__ == "__main__":
     # test_url = "http://192.168.10.115:9000/screenshots/1724855380642.jpg"
-    # print(f'"{test_url}"'.replace("\"", ""))
     # print(hash_url(test_url))
 
     image_size = (200, 100)
