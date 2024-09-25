@@ -30,3 +30,4 @@ minio~=7.2.8
 dataset~=1.6.2
 mysqlclient~=2.2.4
 pycocotools~=2.0.8
+pytesseract~=0.3.13
