@@ -39,13 +39,11 @@ class Canny(nn.Module):
 
 
 def draw_boxes(img: torch.Tensor, bound_boxes: list[torch.Tensor]):
-    img_np = img.squeeze(0).numpy()
-
     for box in bound_boxes:
         x, y, w, h = box.tolist()
-        cv2.rectangle(img_np, (x, y), (x + w, y + h), (0, 255, 0), 2)
+        cv2.rectangle(img.squeeze(0).numpy(), (x, y), (x + w, y + h), color=(0, 255, 0), thickness=2)
 
-    return torch.tensor(np.array([img_np]))
+    return img
 
 
 if __name__ == '__main__':
