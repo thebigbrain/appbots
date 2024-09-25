@@ -43,8 +43,6 @@ def draw_boxes(img: torch.Tensor, bound_boxes: list[torch.Tensor]):
         x, y, w, h = box.tolist()
         cv2.rectangle(img.squeeze(0).numpy(), (x, y), (x + w, y + h), color=(0, 255, 0), thickness=2)
 
-    return img
-
 
 if __name__ == '__main__':
     # 定义图像转换
@@ -54,6 +52,6 @@ if __name__ == '__main__':
     model = Canny()
     boxes = model(gray)
 
-    box_img = draw_boxes(gray, boxes)
+    draw_boxes(gray, boxes)
 
-    plot_images([t, box_img])
+    plot_images([t, gray])
