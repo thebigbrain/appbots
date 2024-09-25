@@ -7,9 +7,9 @@ from appbots.core.images.builder import ImageTensorBuilder
 from appbots.core.images.dataset import build_coco_dataset, rcnn_collate
 from appbots.core.images.transforms import denormalize
 from appbots.core.model import ModelCarer, DictLossNormalizer
-from appbots.objectdetection.transforms import CocoTransforms
+from appbots.uidetection.transforms import CocoTransforms
 
-from appbots.objectdetection.utils import show_bounding_boxes
+from appbots.uidetection.utils import show_bounding_boxes
 
 CocoConfig.load()
 
