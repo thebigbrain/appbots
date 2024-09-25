@@ -5,7 +5,7 @@ from torch import nn
 
 from appbots.core.images.builder import get_image_from_path
 from appbots.core.images.transforms import gray_transform
-from appbots.core.plot import plot_images
+from appbots.core.plot import plot_images, add_boxes
 from appbots.core.utils import get_path
 
 
@@ -38,12 +38,6 @@ class Canny(nn.Module):
         return torch.tensor(np.array(_boxes))
 
 
-def draw_boxes(img: torch.Tensor, bound_boxes: list[torch.Tensor]):
-    for box in bound_boxes:
-        x, y, w, h = box.tolist()
-        cv2.rectangle(img.squeeze(0).numpy(), (x, y), (x + w, y + h), color=(0, 255, 0), thickness=2)
-
-
 if __name__ == '__main__':
     # 定义图像转换
     t, _ = get_image_from_path(get_path("assets/test2.jpg"))
@@ -52,6 +46,6 @@ if __name__ == '__main__':
     model = Canny()
     boxes = model(gray)
 
-    draw_boxes(gray, boxes)
+    add_boxes(gray, boxes)
 
     plot_images([t, gray])

@@ -1,3 +1,4 @@
+import cv2
 import numpy as np
 import torch
 from matplotlib import pyplot as plt
@@ -51,3 +52,9 @@ def plot_boxes(img: torch.Tensor, boxes: list[list[torch.Tensor]]):
         rect = plt.Rectangle((x, y), w, h, fill=False, color='red')
         plt.gca().add_patch(rect)
     plt.show()
+
+
+def add_boxes(img: torch.Tensor, bound_boxes: list[torch.Tensor]):
+    for box in bound_boxes:
+        x, y, w, h = box.tolist()
+        cv2.rectangle(img.squeeze(0).numpy(), (x, y), (x + w, y + h), color=(0, 255, 0), thickness=2)
