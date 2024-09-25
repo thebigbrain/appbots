@@ -30,21 +30,21 @@ def download_image(url: str):
     return temp_file
 
 
-def image_to_tensor(image_path, size=None) -> (Tensor, Image.Image):
+def get_image_from_path(image_path: str, size: tuple[int, int] = None, resize=True, auto_normalize=False) -> tuple[Tensor, Image.Image]:
     source_img = Image.open(image_path).convert("RGB")
-    w, h = source_img.size
-    transform = build_transform(size=[h, w] if size is None else size)
+    w, h = source_img.size if size is None else (size[1], size[0])
+    transform = build_transform(width=w, height=h, auto_normalize=auto_normalize, resize=resize)
     return transform(source_img), source_img
 
 
-def url_to_tensor(url, size=None) -> (Tensor, Image.Image):
+def url_to_tensor(url, size=None) -> tuple[Tensor, Image.Image]:
     img = download_image(url)
-    img_tensor, source_img = image_to_tensor(img, size=size)
+    img_tensor, source_img = get_image_from_path(img, size=size)
     return img_tensor, source_img
 
 
-def read_image(image_path, size=None) -> (Tensor, Image.Image):
-    return image_to_tensor(get_path(image_path), size=size)
+def read_image(image_path, size=None) -> tuple[Tensor, Image.Image]:
+    return get_image_from_path(get_path(image_path), size=size)
 
 
 def to_pil_image(img_tensor: Tensor) -> Image.Image:
@@ -68,7 +68,7 @@ class ImageTensorBuilder:
 
     def load_from_url(self, url: str, size=None):
         self.image_path = download_image(url)
-        self.tensor, self.source = image_to_tensor(self.image_path, size=size)
+        self.tensor, self.source = get_image_from_path(self.image_path, size=size)
 
 
 if __name__ == "__main__":

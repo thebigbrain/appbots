@@ -15,17 +15,28 @@ class CocoTransform:
         pass
 
 
-def build_transform(size=(200, 100), auto_normalize=True) -> v2.Compose:
+def build_transform(width=100, height=200, auto_normalize=True, resize=True) -> v2.Compose:
     _transforms = [
         v2.RGB(),
-        v2.Resize(size=size),
-        v2.ToImage(),
-        v2.ToDtype(torch.float32, scale=True)
     ]
+
+    if resize:
+        _transforms.append(v2.Resize(size=(height, width)),)
+
+    _transforms.append(v2.ToImage())
+
     if auto_normalize:
+        _transforms.append(v2.ToDtype(torch.float32, scale=True))
         _transforms.append(normalize)
 
     return v2.Compose(_transforms)
 
 
 default_transform = build_transform()
+
+gray_transform = v2.Compose(
+    [
+        v2.Grayscale(),
+        v2.ToImage()
+    ]
+)
