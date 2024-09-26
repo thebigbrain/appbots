@@ -1,4 +1,4 @@
-from typing import TypedDict, OrderedDict
+from typing import TypedDict, OrderedDict, Dict
 
 from appbots.core.images.builder import ImageTensorBuilder
 from appbots.datasets.annotation import get_bot_memo
@@ -13,9 +13,12 @@ class CocoImage(TypedDict):
 
 class CocoImageUtil:
     @classmethod
-    def get(cls, image_id) -> CocoImage:
+    def get(cls, image_id) -> CocoImage | None:
         builder = ImageTensorBuilder()
         bm = get_bot_memo(image_id)
+        if bm is None:
+            print(f"Image not found: {image_id}")
+            return None
         builder.load_from_url(bm.get('screenshot'))
 
         (width, height) = builder.source.size

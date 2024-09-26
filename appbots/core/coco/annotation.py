@@ -1,6 +1,6 @@
 from typing import TypedDict, OrderedDict, TypeAlias
 
-from appbots.coco.utils import load_json
+from appbots.core.coco.utils import load_json
 from appbots.core.db import get_table
 
 CocoSegmentation: TypeAlias = list[list[float]]

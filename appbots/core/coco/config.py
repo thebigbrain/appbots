@@ -2,9 +2,9 @@ import json
 import os
 from typing import TypedDict
 
-from appbots.coco.annotation import CocoAnnotation
-from appbots.coco.category import CocoCategory
-from appbots.coco.image import CocoImage
+from appbots.core.coco.annotation import CocoAnnotation
+from appbots.core.coco.category import CocoCategory
+from appbots.core.coco.image import CocoImage
 
 from appbots.core.utils import get_cache_dir, get_coco_dir
 
@@ -33,8 +33,20 @@ class CocoConfig:
         return cls.coco
 
     @classmethod
+    def get_images(cls):
+        return cls.coco['images']
+
+    @classmethod
     def get_categories(cls):
         return cls.coco['categories']
+
+    @classmethod
+    def get_categories_dict(cls):
+        return {cat['id']: cat for cat in cls.get_categories()}
+
+    @classmethod
+    def get_category(cls, cat_id: str):
+        return next(filter(lambda x: x['id'] == cat_id, cls.get_categories()))
 
 
 if __name__ == "__main__":
