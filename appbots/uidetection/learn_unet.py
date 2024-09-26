@@ -2,11 +2,11 @@ import torch
 from torch.utils.data import DataLoader
 import segmentation_models_pytorch as smp
 
-from appbots.coco.config import CocoConfig
+from appbots.core.coco import CocoConfig
 from appbots.core.images.builder import ImageTensorBuilder
 from appbots.core.images.dataset import build_coco_dataset, rcnn_collate
 from appbots.core.images.transforms import denormalize
-from appbots.core.model import ModelCarer, DictLossNormalizer
+from appbots.core.model import ModelCarer
 from appbots.uidetection.transforms import CocoTransforms
 from appbots.uidetection.utils import show_bounding_boxes
 

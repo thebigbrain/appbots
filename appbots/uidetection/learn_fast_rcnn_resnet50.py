@@ -2,7 +2,7 @@ import torch
 from torch.utils.data import DataLoader
 from torchvision.models.detection import fasterrcnn_resnet50_fpn_v2
 
-from appbots.coco.config import CocoConfig
+from appbots.core.coco import CocoConfig
 from appbots.core.images.builder import ImageTensorBuilder
 from appbots.core.images.dataset import build_coco_dataset, rcnn_collate
 from appbots.core.images.transforms import denormalize

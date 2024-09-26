@@ -1,3 +1,4 @@
+import os
 from os import path
 
 
@@ -10,19 +11,41 @@ def get_aide_dir():
 
 
 def get_cache_dir():
-    return path.abspath(path.join(get_aide_dir(), ".cache"))
+    return path.join(get_aide_dir(), ".cache")
 
 
 def get_models_dir():
-    return path.abspath(path.join(get_aide_dir(), ".models"))
+    return path.join(get_aide_dir(), ".models")
 
 
 def get_coco_dir():
-    return path.abspath(path.join(get_aide_dir(), ".coco"))
+    return path.join(get_aide_dir(), ".coco")
 
 
 def get_path(path_str: str):
-    return path.abspath(path.join(get_root_dir(), path_str))
+    return path.join(get_root_dir(), path_str)
+
+
+def get_model_path(name: str):
+    return path.join(get_models_dir(), name)
+
+
+def get_assets(name: str):
+    return get_path(f"assets/{name}")
+
+
+def get_coco_path(name: str):
+    return get_path(path.join(get_aide_dir(), name))
+
+
+def get_yolo_path(name: str):
+    return path.join(get_aide_dir(), ".yolo", name)
+
+
+def mkdir(path_str: str):
+    d = path.dirname(path_str)
+    if not path.exists(d):
+        return os.mkdir(d)
 
 
 if __name__ == "__main__":
