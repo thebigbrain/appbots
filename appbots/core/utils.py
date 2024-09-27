@@ -48,7 +48,8 @@ def get_yolo_path(name: str):
 
 
 def mkdir(dir_str: str):
-    Path(dir_str).mkdir(exist_ok=True)
+    _dir = os.path.dirname(dir_str)
+    Path(_dir).mkdir(exist_ok=True)
 
 
 def write_lines(file_path: str, data: list[str]):
