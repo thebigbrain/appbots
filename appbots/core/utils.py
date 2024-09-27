@@ -35,17 +35,29 @@ def get_assets(name: str):
 
 
 def get_coco_path(name: str):
-    return get_path(path.join(get_aide_dir(), name))
+    return get_path(path.join(get_coco_dir(), name))
+
+
+def get_yolo_dir():
+    return path.join(get_aide_dir(), ".yolo")
 
 
 def get_yolo_path(name: str):
-    return path.join(get_aide_dir(), ".yolo", name)
+    return path.join(get_yolo_dir(), name)
 
 
 def mkdir(path_str: str):
     d = path.dirname(path_str)
     if not path.exists(d):
         return os.mkdir(d)
+
+
+def write_lines(file_path: str, data: list[str]):
+    mkdir(file_path)
+    with open(file_path, 'w') as f:
+        print('write to file', file_path)
+        for line in data:  # data是一个列表，每个元素代表一行
+            f.write(line + '\n')
 
 
 if __name__ == "__main__":

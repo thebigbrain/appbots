@@ -11,6 +11,11 @@ def xywh_to_cxcywh(boxes: torch.Tensor):
     return torch.tensor([cx, cy, abs(w), abs(h)], dtype=torch.float)
 
 
+def cxcywh_to_xywh(center: torch.Tensor):
+    x, y, w, h = center
+    return torch.tensor([x - w / 2, y - h / 2, w, h], dtype=torch.float)
+
+
 def center_to_min_max(center: torch.Tensor):
     cx, cy, w, h = center
     hw = w / 2
@@ -39,7 +44,7 @@ class CocoTransforms(CocoTransform):
         return len(self.categories)
 
     def __call__(self, image, target):
-        boxes = torch.stack([self.transform_box(item) for item in target])
+        boxes = torch.stack([item for item in target])
         labels = torch.tensor([item['category_id'] for item in target])
 
         image = self.transform(image)
@@ -49,9 +54,9 @@ class CocoTransforms(CocoTransform):
         }
         return image, target
 
-    def transform_box(self, target):
-        bbox = torch.tensor(target['bbox'], dtype=torch.float) * self.scale
-        return xywh_to_min_max(bbox)
+    # def transform_box(self, target):
+    #     bbox = torch.tensor(target['bbox'], dtype=torch.float) * self.scale
+    #     return xywh_to_min_max(bbox)
 
 
 if __name__ == '__main__':
