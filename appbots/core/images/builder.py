@@ -8,7 +8,7 @@ from torch import Tensor
 from torchvision import transforms
 
 from appbots.core.images.transforms import build_transform, denormalize
-from appbots.core.utils import get_cache_dir, get_path
+from appbots.core.utils import get_cache_dir, get_path, mkdir
 
 
 def hash_url(url):
@@ -18,6 +18,7 @@ def hash_url(url):
 
 def download_image(url: str):
     temp_dir = get_cache_dir()
+    mkdir(temp_dir)
     temp_file = os.path.join(temp_dir, f"{hash_url(url)}.jpg")
     if os.path.exists(temp_file):
         return temp_file

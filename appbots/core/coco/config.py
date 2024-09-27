@@ -1,12 +1,13 @@
 import json
 import os
+from pathlib import Path
 from typing import TypedDict
 
 from appbots.core.coco.annotation import CocoAnnotation
 from appbots.core.coco.category import CocoCategory
 from appbots.core.coco.image import CocoImage
 
-from appbots.core.utils import get_cache_dir, get_coco_dir
+from appbots.core.utils import get_cache_dir, get_coco_dir, mkdir
 
 
 class Coco(TypedDict):
@@ -22,8 +23,9 @@ class CocoConfig:
 
     @classmethod
     def save(cls, data):
-        with open(cls.ann_file, 'w') as f:
-            json.dump(data, f, indent=2, ensure_ascii=False)
+        mkdir(get_coco_dir())
+        with open(cls.ann_file, 'w') as af:
+            json.dump(data, af, indent=2, ensure_ascii=False)
 
     @classmethod
     def load(cls):

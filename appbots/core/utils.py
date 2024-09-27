@@ -1,5 +1,6 @@
 import os
 from os import path
+from pathlib import Path
 
 
 def get_root_dir():
@@ -46,10 +47,8 @@ def get_yolo_path(name: str):
     return path.join(get_yolo_dir(), name)
 
 
-def mkdir(path_str: str):
-    d = path.dirname(path_str)
-    if not path.exists(d):
-        return os.mkdir(d)
+def mkdir(dir_str: str):
+    Path(dir_str).mkdir(exist_ok=True)
 
 
 def write_lines(file_path: str, data: list[str]):

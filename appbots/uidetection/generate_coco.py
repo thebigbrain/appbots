@@ -11,7 +11,6 @@ def transform_annotation(ann):
     box = torch.tensor(ann['bbox'])
     box = xywh_to_cxcywh(box)
     box = cxcywh_to_xywh(box)
-    print(box)
     ann['bbox'] = box.tolist()
     return ann
 
