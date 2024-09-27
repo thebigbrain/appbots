@@ -24,7 +24,7 @@ class CocoConfig:
     @classmethod
     def save(cls, data):
         mkdir(get_coco_dir())
-        with open(cls.ann_file, 'w') as af:
+        with open(cls.ann_file, 'w', encoding='utf-8') as af:
             json.dump(data, af, indent=2, ensure_ascii=False)
 
     @classmethod
