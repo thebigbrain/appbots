@@ -29,7 +29,7 @@ class CocoConfig:
 
     @classmethod
     def load(cls):
-        with open(cls.ann_file, 'r') as f:
+        with open(cls.ann_file, 'r', encoding='utf-8') as f:
             cls.coco = json.load(f)
 
         return cls.coco

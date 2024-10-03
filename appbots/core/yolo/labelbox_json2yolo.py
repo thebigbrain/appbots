@@ -7,14 +7,14 @@ import yaml
 from PIL import Image
 from tqdm import tqdm
 
-from utils import make_dirs
+from utils import make_yolo_dirs
 
 
 def convert(file, zip=True):
     """Converts Labelbox JSON labels to YOLO format and saves them, with optional zipping."""
     names = []  # class names
     file = Path(file)
-    save_dir = make_dirs(file.stem)
+    save_dir = make_yolo_dirs(file.stem)
     with open(file) as f:
         data = json.load(f)  # load JSON
 

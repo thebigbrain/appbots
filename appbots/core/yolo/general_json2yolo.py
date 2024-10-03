@@ -13,7 +13,7 @@ from utils import *
 # Convert INFOLKS JSON file into YOLO-format labels ----------------------------
 def convert_infolks_json(name, files, img_path):
     """Converts INFOLKS JSON annotations to YOLO-format labels."""
-    path = make_dirs()
+    path = make_yolo_dirs()
 
     # Import json
     data = []
@@ -70,7 +70,7 @@ def convert_infolks_json(name, files, img_path):
 # Convert vott JSON file into YOLO-format labels -------------------------------
 def convert_vott_json(name, files, img_path):
     """Converts VoTT JSON files to YOLO-format labels and organizes dataset structure."""
-    path = make_dirs()
+    path = make_yolo_dirs()
     name = path + os.sep + name
 
     # Import json
@@ -140,7 +140,7 @@ def convert_vott_json(name, files, img_path):
 # Convert ath JSON file into YOLO-format labels --------------------------------
 def convert_ath_json(json_dir):  # dir contains json annotations and images
     """Converts ath JSON annotations to YOLO-format labels, resizes images, and organizes data for training."""
-    dir = make_dirs()  # output directory
+    dir = make_yolo_dirs()  # output directory
 
     jsons = []
     for dirpath, dirnames, filenames in os.walk(json_dir):
@@ -255,7 +255,7 @@ def convert_ath_json(json_dir):  # dir contains json annotations and images
 
 def convert_coco_json(json_dir="../coco/annotations/", use_segments=False, cls91to80=False):
     """Converts COCO JSON format to YOLO label format, with options for segments and class mapping."""
-    save_dir = make_dirs(get_yolo_path("coco"))  # output directory
+    save_dir = make_yolo_dirs(get_yolo_path("coco"))  # output directory
     coco80 = coco91_to_coco80_class()
 
     # Import json

@@ -71,14 +71,12 @@ def split_indices(x, train=0.9, test=0.1, validate=0.0, shuffle=True):  # split 
     return v[:i], v[i:j], v[j:k]  # return indices
 
 
-def make_dirs(dir="new_dir/"):
+def make_yolo_dirs(dirs="new_dir/"):
     """Creates a directory with subdirectories 'labels' and 'images', removing existing ones."""
-    dir = Path(dir)
-    if dir.exists():
-        shutil.rmtree(dir)  # delete dir
-    for p in dir, dir / "labels", dir / "images":
+    _dir = Path(dirs)
+    for p in _dir, _dir / "labels", _dir / "images":
         p.mkdir(parents=True, exist_ok=True)  # make dir
-    return dir
+    return _dir
 
 
 def write_data_data(fname="data.data", nc=80):

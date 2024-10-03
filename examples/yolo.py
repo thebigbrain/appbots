@@ -9,8 +9,8 @@ model = YOLO(get_model_path("yolov5nu.pt"))  # pretrained YOLOv8n model
 
 def train():
     # Train the model
-    results = model.train(data=get_yolo("coco"), epochs=100, imgsz=640)
-    results[0].show()
+    r = model.train(data=get_yolo("coco"), epochs=100, imgsz=640)
+    print(r)
 
 
 def predict():
@@ -23,5 +23,6 @@ def predict():
 
 
 if __name__ == '__main__':
-    train()
-    # predict()
+    # train()
+    predict()
+    pass

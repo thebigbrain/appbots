@@ -33,6 +33,8 @@ class CocoCategoryUtil:
             cls._cat_dict[cat_id] = coco_cat
             cls.categories.append(coco_cat)
 
+        return cls.categories
+
     @classmethod
     def get(cls, category_id) -> CocoCategory:
         cls.load_categories()

@@ -16,7 +16,10 @@ def get_cache_dir():
 
 
 def get_models_dir():
-    return path.join(get_aide_dir(), ".models")
+    model_dir = path.join(get_aide_dir(), ".models")
+    print(model_dir)
+    mkdir(model_dir)
+    return model_dir
 
 
 def get_coco_dir():
@@ -52,12 +55,13 @@ def mkdir(dir_str: str):
     Path(_dir).mkdir(exist_ok=True)
 
 
-def write_lines(file_path: str, data: list[str]):
-    mkdir(file_path)
-    with open(file_path, 'w') as f:
-        print('write to file', file_path)
-        for line in data:  # data是一个列表，每个元素代表一行
-            f.write(line + '\n')
+def write_lines(file_path: str, lines: list[str]):
+    _dir = os.path.dirname(file_path)
+    mkdir(_dir)
+    with open(file_path, 'w', encoding='utf-8') as _f:
+        # print('write to file', file_path)
+        for line in lines:
+            _f.write(line + '\n')
 
 
 if __name__ == "__main__":

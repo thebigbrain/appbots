@@ -1,36 +1,45 @@
 import json
 import os.path
+import shutil
 from collections import defaultdict
+from pathlib import Path
+
+import numpy as np
+from tqdm import tqdm
 
 from appbots.core.utils import get_coco_dir, get_yolo_path, write_lines
-from utils import *
+from appbots.core.yolo.utils import make_yolo_dirs
 
 
-def convert_coco_json(json_dir="../coco/annotations/", use_segments=False, cls91to80=False):
+def convert_coco_json(coco_json_dir, yolo_name="coco", use_segments=False):
     """Converts COCO JSON format to YOLO label format, with options for segments and class mapping."""
-    save_dir = make_dirs(get_yolo_path("coco"))  # output directory
-    coco80 = coco91_to_coco80_class()
+    save_dir = make_yolo_dirs(get_yolo_path(yolo_name))  # output directory
 
     # Import json
-    for json_file in sorted(Path(json_dir).resolve().glob("*.json")):
-        print(json_file)
-        fn = Path(save_dir) / "labels" / json_file.stem.replace("instances_", "")  # folder name
-        fn.mkdir()
-        with open(json_file) as jf:
+    for json_file in sorted(Path(coco_json_dir).resolve().glob("*.json")):
+        with open(json_file, mode='r', encoding="utf-8") as jf:
             data = json.load(jf)
+
+        label_train_dir = Path(save_dir) / "labels"  # folder name
+        label_train_dir.mkdir(exist_ok=True)
+        image_train_dir = Path(save_dir) / "images"
+        image_train_dir.mkdir(exist_ok=True)
 
         # Create image dict
         images = {"{:g}".format(x["id"]): x for x in data["images"]}
 
         # Create image-annotations dict
-        imgToAnns = defaultdict(list)
+        img_to_anns = defaultdict(list)
         for ann in data["annotations"]:
-            imgToAnns[ann["image_id"]].append(ann)
+            img_to_anns[ann["image_id"]].append(ann)
 
         # Write label file
-        for img_id, anns in tqdm(imgToAnns.items(), desc=f"Annotations {json_file}"):
+        for img_id, anns in tqdm(img_to_anns.items(), desc=f"Annotations {json_file}"):
             img = images[f"{img_id:g}"]
             h, w, img_file_name = img["height"], img["width"], img["file_name"]
+
+            img_base_name = os.path.basename(img_file_name)
+            shutil.copy(img_file_name, image_train_dir / img_base_name)
 
             bboxes = []
             segments = []
@@ -46,7 +55,7 @@ def convert_coco_json(json_dir="../coco/annotations/", use_segments=False, cls91
                 if box[2] <= 0 or box[3] <= 0:  # if w <= 0 and h <= 0
                     continue
 
-                cls = len(coco80) - 1 + ann["category_id"]   # class
+                cls = ann["category_id"]   # class
 
                 box = [cls] + box.tolist()
                 if box not in bboxes:
@@ -65,7 +74,7 @@ def convert_coco_json(json_dir="../coco/annotations/", use_segments=False, cls91
 
             # Write
             lines = []
-            file_name = (fn / os.path.basename(img_file_name)).with_suffix(".txt")
+            file_name = (label_train_dir / img_base_name).with_suffix(".txt")
             for i in range(len(bboxes)):
                 line = (*(segments[i] if use_segments else bboxes[i]),)  # cls, box or segments
                 line_format = ("%g " * len(line)).rstrip()
@@ -139,8 +148,6 @@ def merge_multi_segment(segments):
 
 
 if __name__ == "__main__":
-    source = "COCO"
-
     convert_coco_json(
         get_coco_dir(),  # directory with *.json
     )
