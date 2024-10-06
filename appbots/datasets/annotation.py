@@ -1,4 +1,18 @@
-from appbots.core.db import get_table
+from appbots.core.db import get_table, get_db
+
+
+def get_bot_memos():
+    bot_memo_table = get_table('bot_memories')
+    return list(bot_memo_table.find(_limit=100, order_by="-id"))
+
+
+def get_not_bboxes_generated_memos():
+    # bot_memo_table = get_table('bot_memories')
+    # result_iter = bot_memo_table.find(_limit=100, order_by="-id", bboxes_generated=0)
+    result_iter = get_db().query(
+        'SELECT * from bot_memories WHERE bboxes_generated IS NULL OR bboxes_generated = 0 ORDER BY id DESC LIMIT 100'
+    )
+    return list(result_iter)
 
 
 def get_bot_memo(anno_id: int):

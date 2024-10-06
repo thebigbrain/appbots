@@ -1,3 +1,4 @@
+import json
 from typing import TypedDict, OrderedDict, TypeAlias
 
 from appbots.core.coco.utils import load_json
@@ -36,3 +37,37 @@ class CocoAnnotationUtil:
         coco_annotation['bbox'] = load_json(bbox, [])
         return coco_annotation
 
+    @classmethod
+    def create_bboxes_annotations(cls, image_id, bboxes):
+        coco_annotations_table = get_table('coco_annotations')
+        rows = []
+        for b in bboxes:
+            rows.append(dict(image_id=image_id, bbox=json.dumps(b)))
+        coco_annotations_table.insert_many(rows)
+
+    @classmethod
+    def save_bbox_annotation(
+            cls,
+            image_id: int,
+            bbox: list[float],
+            coco_annotation_id: int = None
+    ):
+        coco_annotations_table = get_table('coco_annotations')
+        data = {
+            "image_id": image_id,
+            "bbox": json.dumps(bbox),
+        }
+        if coco_annotation_id:
+            data['id'] = coco_annotation_id
+            coco_annotations_table.update(data, ['id'])
+        else:
+            coco_annotations_table.insert(data)
+
+    @classmethod
+    def set_bboxes_generated(cls, image_id):
+        get_table('bot_memories').update({'bboxes_generated': True, "id": image_id}, ['id'])
+
+
+if __name__ == '__main__':
+    CocoAnnotationUtil.save_bbox_annotation(1, [1, 2, 3, 4])
+    # CocoAnnotationUtil.set_bboxes_generated(2101)

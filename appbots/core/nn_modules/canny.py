@@ -46,6 +46,8 @@ if __name__ == '__main__':
     model = Canny()
     boxes = model(gray)
     print(f"检测到{len(boxes)}个框框")
+    for b in boxes:
+        print(b)
 
     add_boxes(gray, boxes)
 
