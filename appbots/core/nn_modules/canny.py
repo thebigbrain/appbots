@@ -44,7 +44,7 @@ if __name__ == '__main__':
     gray: torch.Tensor = gray_transform(t)
 
     model = Canny()
-    boxes = model(gray)
+    boxes: list[torch.Tensor] = model(gray)
     print(f"检测到{len(boxes)}个框框")
     for b in boxes:
         print(b)

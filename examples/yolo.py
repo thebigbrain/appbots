@@ -15,7 +15,7 @@ def train():
 
 def predict():
     # Run batched inference on a list of images
-    results = model([get_assets("test2.jpg")])  # return a list of Results objects
+    results = model([get_assets("test.png")])  # return a list of Results objects
     # Process results list
     for r in results:
         print(f"Detected {len(r)} objects in image")
@@ -23,6 +23,6 @@ def predict():
 
 
 if __name__ == '__main__':
-    # train()
-    predict()
+    train()
+    # predict()
     pass

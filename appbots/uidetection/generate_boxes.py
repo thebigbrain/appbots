@@ -7,7 +7,7 @@ from appbots.core.nn_modules.canny import Canny
 from appbots.datasets.annotation import get_not_bboxes_generated_memos
 
 if __name__ == '__main__':
-    memos = get_not_bboxes_generated_memos()
+    memos = get_not_bboxes_generated_memos(limit=1)
     print(f"共{len(memos)}个未生成框框")
 
     for memo in memos:
@@ -23,5 +23,5 @@ if __name__ == '__main__':
         print(f"检测到{len(boxes)}个框框")
         h = builder.source.size[1]
         boxes = boxes / h
-        CocoAnnotationUtil.create_bboxes_annotations(img_id, boxes.tolist())
+        CocoAnnotationUtil.update_bboxes_annotations(img_id, boxes.tolist())
         CocoAnnotationUtil.set_bboxes_generated(img_id)
