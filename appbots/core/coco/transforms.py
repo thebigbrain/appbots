@@ -1,3 +1,5 @@
+from typing import Union
+
 import torch
 import torch.nn.functional as F
 
@@ -11,7 +13,7 @@ def xywh_to_cxcywh(boxes: torch.Tensor):
     return torch.tensor([cx, cy, abs(w), abs(h)], dtype=torch.float)
 
 
-def cxcywh_to_xywh(center: torch.Tensor):
+def cxcywh_to_xywh(center: Union[torch.Tensor, list[float|int]]):
     x, y, w, h = center
     return torch.tensor([x - w / 2, y - h / 2, w, h], dtype=torch.float)
 

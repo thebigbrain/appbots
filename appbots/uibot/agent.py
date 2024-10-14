@@ -5,10 +5,11 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from appbots.core.agent import Agent
+from appbots.core.rl.agent import Agent
 from appbots.core.device import device
-from appbots.core.env import Env
+from appbots.core.rl.env import Env
 from appbots.core.model import load_model, save_model
+from appbots.core.utils import get_model_path
 from appbots.uibot.dqn import DQN
 
 
@@ -38,7 +39,8 @@ class UiBotAgent(Agent):
 
         print(f"{input_shape} {n_actions}")
 
-        self.dqn = load_model(DQN(input_shape, n_actions), name=name)
+        self.dqn = DQN(input_shape, n_actions)
+        load_model(self.dqn, model_path=get_model_path(name))
 
         self.target_dqn = DQN(input_shape, n_actions)
         self.target_dqn.load_state_dict(self.dqn.state_dict())
@@ -47,7 +49,7 @@ class UiBotAgent(Agent):
     def save(self):
         self.target_dqn.load_state_dict(self.dqn.state_dict())
 
-        save_model(self.target_dqn, self.name)
+        save_model(self.target_dqn, get_model_path(self.name))
 
     def get_action(self, state: Any) -> Any:
         if np.random.rand() < self.epsilon:

@@ -7,8 +7,8 @@ from PIL import Image
 from torch import Tensor
 from torchvision import transforms
 
-from appbots.core.images.transforms import build_transform, denormalize
-from appbots.core.utils import get_cache_dir, get_path, mkdir
+from appbots.core.images.transforms import build_transform, denormalize, default_transform
+from appbots.core.utils import get_cache_dir, get_path, mkdir, get_assets
 
 
 def hash_url(url):
@@ -44,8 +44,8 @@ def url_to_tensor(url, size=None) -> tuple[Tensor, Image.Image]:
     return img_tensor, source_img
 
 
-def read_image(image_path, size=None) -> tuple[Tensor, Image.Image]:
-    return get_image_from_path(get_path(image_path), size=size)
+def read_image(image_path) -> Image.Image:
+    return Image.open(image_path).convert("RGB")
 
 
 def to_pil_image(img_tensor: Tensor) -> Image.Image:
@@ -65,7 +65,7 @@ class ImageTensorBuilder:
 
     def load_from_path(self, image_path: str, size=None):
         self.image_path = image_path
-        self.tensor, self.source = read_image(image_path, size=size)
+        self.tensor, self.source = get_image_from_path(image_path, size=size)
 
     def load_from_url(self, url: str, size=None):
         self.image_path = download_image(url)
@@ -76,7 +76,8 @@ if __name__ == "__main__":
     # test_url = "http://192.168.10.115:9000/screenshots/1724855380642.jpg"
     # print(hash_url(test_url))
 
-    image_size = (200, 100)
-    t, _ = read_image("assets/test.png", size=image_size)
+    image_size = (640, 320)
+    source = read_image(get_assets("test.png"))
+    t = default_transform(source)
     pil_image = to_pil_image(t)
     pil_image.show()

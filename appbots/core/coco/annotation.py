@@ -20,22 +20,22 @@ class CocoAnnotation(TypedDict):
 class CocoAnnotationUtil:
     @classmethod
     def load_coco_annotations(cls):
-        coco_annotations_table = get_table('coco_annotations')
-        iters = coco_annotations_table.find(_limit=100, order_by=['-id'])
+        iters = cls.load_annotations_raw()
         annotations = []
         for item in iters:
-            annotations.append(cls.build_coco_annotation(item))
+            annotations += cls.build_coco_annotations(item)
         return annotations
 
     @classmethod
-    def build_coco_annotation(cls, data: OrderedDict):
-        segmentation = data.get('segmentation')
-        bbox = data.get('bbox')
+    def load_annotations_raw(cls):
+        coco_annotations_table = get_table('coco_annotations')
+        annotations_iter = coco_annotations_table.find(_limit=100, order_by=['-id'])
+        return list(annotations_iter)
 
-        coco_annotation: CocoAnnotation = {k: v for k, v in data.items() if k in CocoAnnotation.__annotations__}
-        coco_annotation['segmentation'] = load_json(segmentation, [])
-        coco_annotation['bbox'] = load_json(bbox, [])
-        return coco_annotation
+    @classmethod
+    def build_coco_annotations(cls, data: OrderedDict):
+        annotations: list[CocoAnnotation] = load_json(data.get('annotations'), [])
+        return annotations
 
     @classmethod
     def update_bboxes_annotations(cls, image_id, bboxes):

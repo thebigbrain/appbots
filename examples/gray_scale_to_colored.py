@@ -1,13 +1,9 @@
-import torch
-
 from appbots.core.images.builder import get_image_from_path
 from appbots.core.images.transforms import gray_transform
 from appbots.core.nn_modules.conv_sobel import SobelConv2d
-from appbots.core.plot import plot_images, plot_boxes
+from appbots.core.plots.plot import plot_images
 from appbots.core.utils import get_path
 import torch
-import cv2
-import numpy as np
 
 
 def grayscale_to_colored(img: torch.Tensor, n=3):

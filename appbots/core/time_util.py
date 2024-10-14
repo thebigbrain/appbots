@@ -9,3 +9,7 @@ class TimeConsuming:
         end_time = time.time()
         elapsed = int((end_time - self.start_time) * 1000) / 1000
         return elapsed, f"耗时 {elapsed} 秒"
+
+
+def get_now_str():
+    return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())

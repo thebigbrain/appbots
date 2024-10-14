@@ -5,7 +5,7 @@ from torch import nn
 
 from appbots.core.images.builder import get_image_from_path
 from appbots.core.images.transforms import gray_transform
-from appbots.core.plot import plot_images, add_boxes
+from appbots.core.plots.plot import plot_images, add_boxes
 from appbots.core.utils import get_path
 
 

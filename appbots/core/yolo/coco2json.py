@@ -11,6 +11,15 @@ from appbots.core.utils import get_coco_dir, get_yolo_path, write_lines
 from appbots.core.yolo.utils import make_yolo_dirs
 
 
+def coco_box2yolo_label(box: list[float], w: float, h: float):
+    box = np.array(box, dtype=np.float64)
+    box[:2] += box[2:] / 2  # xy top-left corner to center
+    box[[0, 2]] /= w  # normalize x
+    box[[1, 3]] /= h  # normalize y
+
+    return box
+
+
 def convert_coco_json(coco_json_dir, yolo_name="coco", use_segments=False):
     """Converts COCO JSON format to YOLO label format, with options for segments and class mapping."""
     save_dir = make_yolo_dirs(get_yolo_path(yolo_name))  # output directory
@@ -48,10 +57,7 @@ def convert_coco_json(coco_json_dir, yolo_name="coco", use_segments=False):
                     continue
 
                 # The COCO box format is [top left x, top left y, width, height]
-                box = np.array(ann["bbox"], dtype=np.float64)
-                box[:2] += box[2:] / 2  # xy top-left corner to center
-                box[[0, 2]] /= w  # normalize x
-                box[[1, 3]] /= h  # normalize y
+                box = coco_box2yolo_label(ann["bbox"], w, h)
                 if box[2] <= 0 or box[3] <= 0:  # if w <= 0 and h <= 0
                     continue
 

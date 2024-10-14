@@ -18,18 +18,18 @@ class Coco(TypedDict):
 
 class CocoConfig:
     ann_file = os.path.join(get_coco_dir(), "coco.json")
-    coco_data_dir = get_cache_dir()
+    data_dir = get_cache_dir()
     coco: Coco = None
 
     @classmethod
     def save(cls, data):
         mkdir(get_coco_dir())
-        with open(cls.ann_file, 'w', encoding='utf-8') as af:
+        with open(cls.ann_file, 'w') as af:
             json.dump(data, af, indent=2, ensure_ascii=False)
 
     @classmethod
     def load(cls):
-        with open(cls.ann_file, 'r', encoding='utf-8') as f:
+        with open(cls.ann_file, 'r') as f:
             cls.coco = json.load(f)
 
         return cls.coco

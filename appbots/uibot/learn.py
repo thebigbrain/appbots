@@ -1,5 +1,5 @@
-from appbots.core.agent import Agent
-from appbots.core.env import Env
+from appbots.core.rl.agent import Agent
+from appbots.core.rl.env import Env
 from appbots.core.time_util import TimeConsuming
 from appbots.uibot.agent import UiBotAgent
 from appbots.uibot.env import UiBotEnv

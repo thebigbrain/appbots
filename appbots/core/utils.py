@@ -17,7 +17,6 @@ def get_cache_dir():
 
 def get_models_dir():
     model_dir = path.join(get_aide_dir(), ".models")
-    print(model_dir)
     mkdir(model_dir)
     return model_dir
 
@@ -28,6 +27,10 @@ def get_coco_dir():
 
 def get_path(path_str: str):
     return path.join(get_root_dir(), path_str)
+
+
+def get_runs_path(name: str):
+    return path.join(get_aide_dir(), "runs", name)
 
 
 def get_model_path(name: str):
@@ -52,7 +55,7 @@ def get_yolo_path(name: str):
 
 def mkdir(dir_str: str):
     _dir = os.path.dirname(dir_str)
-    Path(_dir).mkdir(exist_ok=True)
+    Path(_dir).mkdir(exist_ok=True, parents=True)
 
 
 def write_lines(file_path: str, lines: list[str]):

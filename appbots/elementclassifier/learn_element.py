@@ -4,7 +4,7 @@ import torchvision
 from torch.utils.data import DataLoader
 
 from appbots.core.images.transforms import build_transform
-from appbots.core.model import ModelCarer
+from appbots.core.model import Trainer
 from appbots.core.utils import get_cache_dir
 from appbots.elementclassifier.model import ElementClassifier
 
@@ -21,7 +21,7 @@ data_loader = DataLoader(
 )
 
 # 创建模型、优化器等
-carer = ModelCarer(
+carer = Trainer(
     model=ElementClassifier(num_classes=10),
     name="element_classifier",
     num_epochs=15
@@ -42,7 +42,6 @@ def train():
         for images in data_loader:
             outputs = model(images)
             loss = criterion(outputs, labels) + bbox_loss(predicted_bboxes, target_bboxes)
-            carer.save_loss(epoch, loss)
 
             optimizer.zero_grad()
             loss.backward()

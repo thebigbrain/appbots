@@ -15,7 +15,7 @@ def plot_images(images: list[torch.Tensor]):
     plt.figure(figsize=(16, 16))
     for i, img in enumerate(images):
         plt.subplot(1, len(images), i + 1)
-        plt.imshow(img.permute(1, 2, 0).numpy())
+        plt.imshow(img.permute(1, 2, 0).detach().numpy())
         plt.axis('off')
     plt.show()
 
@@ -44,17 +44,17 @@ def plot_surface(img: torch.Tensor):
     plt.show()
 
 
-def plot_boxes(img: torch.Tensor, boxes: list[list[torch.Tensor]]):
+def plot_boxes(img: torch.Tensor, boxes: list[torch.Tensor]):
     # 绘制边界框
     plt.imshow(img.permute(1, 2, 0).numpy())
     for box in boxes:
-        x, y, w, h = box
+        x, y, w, h = box.tolist()
         rect = plt.Rectangle((x, y), w, h, fill=False, color='red')
         plt.gca().add_patch(rect)
     plt.show()
 
 
-def add_boxes(img: torch.Tensor, bound_boxes: list[torch.Tensor]):
+def add_boxes(img: torch.Tensor, bound_boxes: list[torch.Tensor], color=(0, 255, 0), thickness=2):
     for box in bound_boxes:
         x, y, w, h = box.tolist()
-        cv2.rectangle(img.squeeze(0).numpy(), (x, y), (x + w, y + h), color=(0, 255, 0), thickness=2)
+        cv2.rectangle(img.squeeze(0).numpy(), (x, y), (x + w, y + h), color=color, thickness=thickness)
